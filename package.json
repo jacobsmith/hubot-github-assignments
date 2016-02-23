@@ -1,7 +1,7 @@
 {
   "name": "hubot-lists",
   "description": "A hubot script that allows tracking various items in different lists.",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "author": "Jacob Smith <jacob.wesley.smith@gmail.com>",
   "license": "MIT",
   "keywords": "lists, tracking",
