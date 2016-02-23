@@ -117,3 +117,11 @@ describe 'lists', ->
       waitForReplies 1, room, ->
         expect(room.robot.brain.get('lists')['test-list']).to.eql(undefined)
         done()
+
+  describe "show contents of a list", ->
+    it "shows all of the contents of that list", (done) ->
+      @robot.brain.set 'lists', 'test-list': ['foo', 'bar', 'baz']
+      room.user.say 'alice', '@hubot show list test-list'
+      waitForReplies 1, room, ->
+        expect(lastMessageContent(room)).to.eql "@alice Here are the contents of test-list:\n - foo\n - bar\n - baz"
+        done()

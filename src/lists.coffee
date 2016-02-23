@@ -80,3 +80,13 @@ module.exports = (robot) ->
 
     delete lists[listName]
     res.reply "Successfully removed the list #{listName}."
+
+  robot.respond /show list (.*)/i, id: 'lists.show-list', (res) ->
+    console.log "INSIDE OF SHOW LISTS!"
+    listName = normalizeListName(res.match[1])
+    lists = robot.brain.get('lists')
+    if !lists[listName]
+      res.reply "No list found with that name. Please double check your spelling."
+      return
+    listContents = _.join(_.map(lists[listName], (i) -> "\n - #{i}"), "")
+    res.reply "Here are the contents of #{listName}:#{listContents}"
