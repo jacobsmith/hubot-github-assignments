@@ -1,19 +1,20 @@
 {
-  "name": "hubot-lists",
-  "description": "A hubot script that allows tracking various items in different lists.",
-  "version": "0.2.0",
+  "name": "hubot-github",
+  "description": "A hubot script for interfacing with github",
+  "version": "0.0.1",
   "author": "Jacob Smith <jacob.wesley.smith@gmail.com>",
   "license": "MIT",
-  "keywords": "lists, tracking",
+  "keywords": "github, assigned, assignments",
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-lists.git"
+    "url": "git://github.com/jacobsmith/hubot-github.git"
   },
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-lists/issues"
+    "url": "https://github.com/jacobsmith/hubot-github/issues"
   },
   "dependencies": {
-    "lodash": "^4.0.0"
+    "lodash": "^4.0.0",
+    "github4": "latest"
   },
   "peerDependencies": {
     "hubot": "2.x"
@@ -31,7 +32,8 @@
     "matchdep": "~0.3.0",
     "mocha": "^2.1.0",
     "sinon": "^1.13.0",
-    "sinon-chai": "^2.7.0"
+    "sinon-chai": "^2.7.0",
+    "nock": "latest"
   },
   "main": "index.coffee",
   "scripts": {
