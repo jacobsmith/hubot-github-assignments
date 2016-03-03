@@ -1,5 +1,5 @@
 {
-  "name": "hubot-github",
+  "name": "hubot-github-assignments",
   "description": "A hubot script for interfacing with github",
   "version": "0.0.1",
   "author": "Jacob Smith <jacob.wesley.smith@gmail.com>",
