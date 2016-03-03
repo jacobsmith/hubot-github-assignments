@@ -44,7 +44,7 @@ parse_pr = (pr) ->
   assignee = _.get(pr, 'assignee.login') || 'no one'
   title = pr.title
   author = pr.user.login
-  link = pr._links.self.href
+  link = pr._links.html.href
   {
     number: number,
     assignee: assignee,
