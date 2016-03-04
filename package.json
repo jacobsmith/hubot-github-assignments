@@ -1,7 +1,7 @@
 {
   "name": "hubot-github-assignments",
   "description": "A hubot script for interfacing with github",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Jacob Smith <jacob.wesley.smith@gmail.com>",
   "license": "MIT",
   "keywords": "github, assigned, assignments",
