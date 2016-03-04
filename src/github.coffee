@@ -58,7 +58,7 @@ module.exports = (robot) ->
       res.reply _.join(_.map(pullRequestResponse, (i) -> "\n - #{i}"), "")
     )
 
-  robot.respond /^(prs|pull requests)\s?(assigned to|for)\s?(.*)/i, id: 'github.pull-requests-assigned-to-user', (res) ->
+  robot.respond /(prs|pull requests)\s?(assigned to|for)\s?(.*)/i, id: 'github.pull-requests-assigned-to-user', (res) ->
     user = res.match[1].toLowerCase()
     if user == "me"
       user = "@#{res.message.user.name.toLowerCase()}"
