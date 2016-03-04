@@ -50,7 +50,7 @@ assigned_to_user = (opts, user) ->
 module.exports = (robot) ->
   pullRequestParser = new PullRequestParser(robot)
 
-  robot.respond /(list)?\s?(open|all( open)?)?\s?(pull requests|prs)/i, id: 'github.list-open-pull-requests', (res) ->
+  robot.respond /(list)?\s?(open|all( open)?)?\s?(pull requests|prs)$/i, id: 'github.list-open-pull-requests', (res) ->
     github.pullRequests.getAll({ user: github_user, repo: github_repo}, (err, github_response) ->
       pullRequests = github_response
       pullRequestResponse = []
@@ -58,7 +58,7 @@ module.exports = (robot) ->
       res.reply _.join(_.map(pullRequestResponse, (i) -> "\n - #{i}"), "")
     )
 
-  robot.respond /(prs|pull requests)\s?(assigned to|for)\s?(.*)/i, id: 'github.pull-requests-assigned-to-user', (res) ->
+  robot.respond /^(prs|pull requests)\s?(assigned to|for)\s?(.*)/i, id: 'github.pull-requests-assigned-to-user', (res) ->
     user = res.match[1].toLowerCase()
     if user == "me"
       user = "@#{res.message.user.name.toLowerCase()}"
