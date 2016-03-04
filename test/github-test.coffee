@@ -42,7 +42,8 @@ describe 'github', ->
       room.user.say 'alice', '@hubot i am alice_github on github'
       waitForReplies 2, room, ->
         expect(lastMessageContent(room)).to.equal("@alice Successfully connected alice to github user alice_github")
-        expect(room.robot.brain.get("github-assignments.alice_github")).to.equal('@alice')
+        expect(room.robot.brain.get("github-assignments.github-name.alice_github")).to.equal('@alice')
+        expect(room.robot.brain.get("github-assignments.chat-name.@alice")).to.equal('alice_github')
         done()
 
   describe 'PullRequestParser', ->

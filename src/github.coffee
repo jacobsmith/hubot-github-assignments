@@ -59,7 +59,13 @@ module.exports = (robot) ->
     )
 
   robot.respond /pull requests assigned to (.*)/i, id: 'github.pull-requests-assigned-to-user', (res) ->
-    user = res.match[1]
+    user = res.match[1].toLowerCase()
+    if user == "me"
+      user = "@#{res.message.user.name.toLowerCase()}"
+
+    if robot.brain.get("github-assignments.chat-name.#{user}")
+      user = robot.brain.get("github-assignments.chat-name.#{user}")
+
     github.pullRequests.getAll({ user: github_user, repo: github_repo}, (err, pullRequests) ->
       pullRequestResponse = []
       _.each(pullRequests, (pr) ->
@@ -77,5 +83,6 @@ module.exports = (robot) ->
 
   robot.respond /i am (.*) on github/i, id: 'github.self-identify', (res) ->
     githubUserName = res.match[1]
-    robot.brain.set("github-assignments.#{githubUserName}", "@#{res.message.user.name}")
+    robot.brain.set("github-assignments.github-name.#{githubUserName}", "@#{res.message.user.name}")
+    robot.brain.set("github-assignments.chat-name.#{"@" + res.message.user.name.toLowerCase()}", "#{githubUserName}")
     res.reply "Successfully connected #{res.message.user.name} to github user #{githubUserName}"
