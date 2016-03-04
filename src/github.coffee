@@ -22,6 +22,8 @@
 #   Jacob Smith <jacob.wesley.smith@gmail.com>
 
 _ = require('lodash')
+PullRequestParser = require './pull_request_parser'
+
 GitHubApi = require('github4')
 github = new GitHubApi({
     version: "3.0.0",
@@ -39,43 +41,29 @@ github_user = "#{process.env.HUBOT_GITHUB_USER}"
 github_repo = "#{process.env.HUBOT_GITHUB_REPO}"
 
 
-parse_pr = (pr) ->
-  number = pr.number
-  assignee = _.get(pr, 'assignee.login') || 'no one'
-  title = pr.title
-  author = pr.user.login
-  link = pr._links.html.href
-  {
-    number: number,
-    assignee: assignee,
-    title: title,
-    author: author,
-    link: link
-  }
-
 overview_text = (opts) ->
-  "#{opts.author}'s PR ##{opts.number} (#{opts.title}) is assigned to #{opts.assignee} (#{opts.link})'"
+  "#{opts.author}'s [PR #{opts.number} - #{opts.title}](#{opts.link}) is assigned to #{opts.assignee}"
 
 assigned_to_user = (opts, user) ->
-  "#{opts.author}'s PR ##{opts.number} (#{opts.link}) is assigned to #{user}."
-
+  "#{opts.author}'s [PR ##{opts.number} - #{opts.title}](#{opts.link}) is assigned to #{user}."
 
 module.exports = (robot) ->
+  pullRequestParser = new PullRequestParser(robot)
 
   robot.respond /list open pull requests/i, id: 'github.list-open-pull-requests', (res) ->
     github.pullRequests.getAll({ user: github_user, repo: github_repo}, (err, github_response) ->
       pullRequests = github_response
       pullRequestResponse = []
-      _.each(pullRequests, (pr) -> pullRequestResponse.push(overview_text(parse_pr(pr))))
+      _.each(pullRequests, (pr) -> pullRequestResponse.push(overview_text(pullRequestParser.get_opts(pr))))
       res.reply _.join(_.map(pullRequestResponse, (i) -> "\n - #{i}"), "")
     )
 
-  robot.respond /pull requests assigned to (.*)/i, id: 'github.pull-requests-assigned-to-me', (res) ->
+  robot.respond /pull requests assigned to (.*)/i, id: 'github.pull-requests-assigned-to-user', (res) ->
     user = res.match[1]
     github.pullRequests.getAll({ user: github_user, repo: github_repo}, (err, pullRequests) ->
       pullRequestResponse = []
       _.each(pullRequests, (pr) ->
-        opts = parse_pr(pr)
+        opts = pullRequestParser.get_opts(pr)
         if opts.assignee == user
           pullRequestResponse.push(
             assigned_to_user(parse_pr(pr), user)
@@ -86,3 +74,8 @@ module.exports = (robot) ->
       else
         res.reply "There are no pull requests currently assigned to: #{user}"
     )
+
+  robot.respond /i am (.*) on github/i, id: 'github.self-identify', (res) ->
+    githubUserName = res.match[1]
+    robot.brain.set("github-assignments.#{githubUserName}", "@#{res.message.user.name}")
+    res.reply "Successfully connected #{res.message.user.name} to github user #{githubUserName}"
