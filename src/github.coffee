@@ -64,7 +64,7 @@ module.exports = (robot) ->
       user = "@#{res.message.user.name.toLowerCase()}"
 
     if robot.brain.get("github-assignments.chat-name.#{user}")
-      user = robot.brain.get("github-assignments.chat-name.#{user}")
+      user = robot.brain.get("github-assignments.github-name.#{user}")
 
     github.pullRequests.getAll({ user: github_user, repo: github_repo}, (err, pullRequests) ->
       pullRequestResponse = []
